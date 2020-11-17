@@ -68,6 +68,7 @@ app.layout = html.Div([
     #### Firstly column names need to be normalized and standardized  
     #### There is a couple of data inconsistency such as float in Cuisines column  
     #### Some restaurant located in the middle of the water (with zero Latitude and Longitude) which cases data to be falsy.  
+    #### after data cleaning and preprocessing, this data could be used to make a restaurant recommendation system for a country as a whole to fill the gaps of other Cuisines missing.  
     ** ps. ** this is a totally free dashboard made with python with no styling, which can be achieved by normal front end developments
     ''')
 
