@@ -60,18 +60,18 @@ app.layout = html.Div([
             )
         ],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
 
-    ],style={'padding-bottom': '20px'}),
+    ],style={'padding-bottom': '10px'}),
 
     dcc.Graph(id='indicator-graphic'),
     dcc.Markdown('''
     # Extra insights  
     #### Firstly column names need to be normalized and standardized  
     #### There is a couple of data inconsistency such as float in Cuisines column  
-    #### Some restaurant located in the middle of the water (error in Coordinates)  
+    #### Some restaurant located in the middle of the water (with zero Latitude and Longitude) which cases data to be falsy.  
     ** ps. ** this is a totally free dashboard made with python with no styling, which can be achieved by normal front end developments
     ''')
 
-],style={'padding': '10px'})
+],style={'padding': '20px'})
 def cuis_trans(a,cuis):
     if type(a) == float:
         return False
