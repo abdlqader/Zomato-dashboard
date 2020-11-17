@@ -60,7 +60,7 @@ app.layout = html.Div([
             )
         ],style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
 
-    ]),
+    ],style={'padding-bottom': '20px'}),
 
     dcc.Graph(id='indicator-graphic'),
     dcc.Markdown('''
@@ -71,7 +71,7 @@ app.layout = html.Div([
     ** ps. ** this is a totally free dashboard made with python with no styling, which can be achieved by normal front end developments
     ''')
 
-])
+],style={'padding': '10px'})
 def cuis_trans(a,cuis):
     if type(a) == float:
         return False
