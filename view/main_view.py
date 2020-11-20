@@ -8,30 +8,22 @@ Created on Fri Nov 20 10:30:12 2020
 import sys
 sys.path.append("..")
 from maindash import app 
-from view.test_view import tab1_content
+from view.tab1 import tab1_content
+from view.tab2 import tab2_content
 
+import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-def main_view():
 
-    tab2_content = dbc.Card(
-        dbc.CardBody(
-            [
-                html.P("This is tab 2!", className="card-text"),
-                dbc.Button("Don't click here", color="danger"),
-            ]
-        ),
-        className="mt-3",
-    )
-    
+def main_view():
     
     return dbc.Tabs(
         [
-            dbc.Tab(tab1_content(), label="Tab 1"),
-            dbc.Tab(tab2_content, label="Tab 2"),
+            dbc.Tab(tab1_content(), label="Word Distribution"),
+            dbc.Tab(tab2_content(), label="Cost and Rating"),
             dbc.Tab(
                 "This tab's content is never seen", label="Tab 3", disabled=True
             ),
