@@ -22,10 +22,10 @@ def tab4_content():
                 
                 dbc.CardBody(
                 [
-                    html.H4("Cuisines", className="card-title"),
-                    html.H6("India has the most Cuisines", className="card-text"),
-                    html.H6("Sum Dim is the most expensive cuisine for two in dollars", className="card-text"),
-                    html.H6("Some data inconsistancy such as float in Cuisines Column, 9 occurence", className="card-text"),
+                    html.H4("Restaurants", className="card-title"),
+                    html.H6("None", className="card-text"),
+                    html.H6("None", className="card-text"),
+                    html.H6("None", className="card-text"),
                 ]
     ),
                 className="mt-3",
