@@ -13,14 +13,15 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import plotly.express as px
 
-avg_cost = df.avg_cost_per_country()
+
 sum_rating = df.count_rating_text_rest()
-dff = df.dataframe
+
+df_country = df.make_df_country()
 
 def tab2_content():
-    fig1 = px.pie(df.count_rest_per_country(),values='Count',names='Country', title ='Restaurants Distribution by Country' )
+    fig1 = px.pie(df_country,values='Count Restaurants',names='Country', title ='Restaurants Distribution by Country' )
     
-    fig2 = px.bar(avg_cost, x='Country', y='Average Cost for two in dollars',
+    fig2 = px.bar(df_country.sort_values('Mean Cost for two in dollars',ascending=False), x='Country', y='Mean Cost for two in dollars',
              labels={'Country':'Average cost for two in dollars'}, height=400)
     
     fig3 = px.bar(sum_rating, x='Percentage', y='Rating',

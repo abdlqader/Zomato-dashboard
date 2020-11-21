@@ -10,8 +10,10 @@ sys.path.append("..")
 from maindash import app 
 from view.tab1 import tab1_content
 from view.tab2 import tab2_content
+from view.tab3 import tab3_content
+from view.tab4 import tab4_content
+from view.tab5 import tab5_content
 
-import pandas as pd
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
@@ -24,9 +26,9 @@ def main_view():
         [
             dbc.Tab(tab1_content(), label="Word Distribution"),
             dbc.Tab(tab2_content(), label="Cost and Rating"),
-            dbc.Tab(
-                "This tab's content is never seen", label="Tab 3", disabled=True
-            ),
+            dbc.Tab(tab3_content(), label="Cuisines Distribution"),
+            dbc.Tab(tab4_content(), label="Restaurants Information"),
+            dbc.Tab(tab5_content(), label="Dashboard"),
         ]
     )
 
@@ -36,4 +38,10 @@ def main_view():
             return tab1_content
         elif at == "tab-2":
             return tab2_content
+        elif at == "tab-3":
+            return tab3_content
+        elif at == "tab-4":
+            return tab4_content
+        elif at == "tab-5":
+            return tab5_content
         return html.P("This shouldn't ever be displayed...")

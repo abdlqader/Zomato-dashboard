@@ -13,6 +13,9 @@ class df_proccess:
         country_code_df = pd.read_excel('zomato/Country-Code.xlsx')
         self.dataframe = pd.merge(df,country_code_df,on='Country Code')
         self.standerdize_currency()
+        self.cuisines_tolist()
+        self.df_countries = None
+        self.df_cuisines = None
     
     def standerdize_currency(self):
         data = {'Currency':['Botswana Pula(p)','Brazilian Real(R$)','Dollar($)','Emirati Diram(AED)','Indian Rupees(Rs.)','Indonesian Rupiah(IDR)','NewZealand($)','Pounds(£)','Qatari Rial(QR)','Rand(R)','Sri Lankan Rupee(LKR)','Turkish Lira(TL)'],
@@ -21,16 +24,50 @@ class df_proccess:
         self.dataframe = pd.merge(self.dataframe,currency_df, on='Currency')
         self.dataframe['Average Cost for two in dollars'] = self.dataframe['Average Cost for two']/self.dataframe['Currency To Dollars']
         
-    def avg_cost_per_country(self):
-        return self.dataframe[['Country','Average Cost for two in dollars']].groupby('Country').mean().reset_index().sort_values('Average Cost for two in dollars',ascending=False)
-    def count_rest_per_country(self):
-        new_df = self.dataframe['Country'].value_counts().reset_index()
-        new_df.columns = ['Country','Count']
-        new_df
-        return new_df
+    def cuisines_tolist(self):
+        self.dataframe['Cuisines'] = self.dataframe.Cuisines.apply(lambda x: '' if type(x) == float else x)
+        self.dataframe['Cuisines List'] = self.dataframe.Cuisines.apply(lambda x:[x.strip() for x in x.split(',')])
+        
     def count_rating_text_rest(self):
         new_df = self.dataframe['Rating text'].value_counts().reset_index()
         new_df.columns = ['Rating','Count']
         new_df['Percentage'] = new_df.Count.apply(lambda x: (x*100)/sum(new_df.Count))
         return new_df
     
+    def count_cost_range_rating(self):
+        new_df = self.dataframe['Rating text'].value_counts().reset_index()
+        new_df.columns = ['Rating','Count']
+        new_df['Percentage'] = new_df.Count.apply(lambda x: (x*100)/sum(new_df.Count))
+        return new_df
+        
+    def make_df_country(self):
+        data_mean = self.dataframe[['Country','Average Cost for two in dollars']].groupby('Country').mean().reset_index()
+        data_count = self.dataframe[['Country','Average Cost for two in dollars']].groupby('Country').count().reset_index()
+        dict_cuisine = {'Country': [],
+                'Count Cuisines' : []}
+        for country in data_mean.Country:
+            my_df = self.dataframe[self.dataframe['Country'] == country]
+            count = set([i for x in my_df['Cuisines List'] for i in x])
+            dict_cuisine['Country'].append(country)
+            dict_cuisine['Count Cuisines'].append(len(count))
+        data_total = pd.merge(data_mean,data_count,on='Country')
+        self.df_countries = pd.merge(data_total,pd.DataFrame(dict_cuisine),on='Country')
+        self.df_countries.columns = ['Country','Mean Cost for two in dollars','Count Restaurants','Count Cuisines']
+        return self.df_countries
+    
+    def make_df_cuisine(self):
+        dict_cuisine = {}
+        dict_avg_cuisine = {}
+        for i,Cuisines in enumerate(self.dataframe['Cuisines List']):
+          for Cuisine in Cuisines:
+            if Cuisine in dict_cuisine:
+              dict_cuisine[Cuisine] += 1
+              dict_avg_cuisine[Cuisine] += self.dataframe.iloc[i]['Average Cost for two in dollars']
+            else:
+              dict_cuisine[Cuisine] = 1
+              dict_avg_cuisine[Cuisine] = self.dataframe.iloc[i]['Average Cost for two in dollars']
+        self.df_cuisines = pd.DataFrame(data={'Cuisines':list(dict_cuisine.keys()),
+                   'Count':list(dict_cuisine.values()),
+                   'Sum':list(dict_avg_cuisine.values())}).sort_values('Count').reset_index(drop=True)
+        self.df_cuisines['Average Cost for two in dollars'] = self.df_cuisines['Sum']/self.df_cuisines['Count']
+        return self.df_cuisines
