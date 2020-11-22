@@ -16,6 +16,7 @@ class df_proccess:
         self.cuisines_tolist()
         self.df_countries = None
         self.df_cuisines = None
+        self.df_cost_rating = None
     
     def standerdize_currency(self):
         data = {'Currency':['Botswana Pula(p)','Brazilian Real(R$)','Dollar($)','Emirati Diram(AED)','Indian Rupees(Rs.)','Indonesian Rupiah(IDR)','NewZealand($)','Pounds(£)','Qatari Rial(QR)','Rand(R)','Sri Lankan Rupee(LKR)','Turkish Lira(TL)'],
@@ -39,6 +40,21 @@ class df_proccess:
         new_df.columns = ['Rating','Count']
         new_df['Percentage'] = new_df.Count.apply(lambda x: (x*100)/sum(new_df.Count))
         return new_df
+    
+
+    def make_df_cost_rating(self):
+        def price_range_toStrings(x):
+          if x == 1:
+            return 'One'
+          elif x == 2:
+            return 'Two'
+          elif x == 3:
+            return 'Three'
+          else:
+            return 'Four'
+        self.df_cost_rating = self.dataframe[['Price range','Aggregate rating','Rating text','Average Cost for two in dollars','Votes']]
+        self.df_cost_rating['Price range text'] = self.df_cost_rating['Price range'].apply(lambda x : price_range_toStrings(x))
+        return self.df_cost_rating
         
     def make_df_country(self):
         data_mean = self.dataframe[['Country','Average Cost for two in dollars']].groupby('Country').mean().reset_index()
